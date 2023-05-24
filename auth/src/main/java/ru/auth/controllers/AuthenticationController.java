@@ -1,15 +1,21 @@
 package ru.auth.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.auth.dao.AuthenticationService;
-import ru.auth.models.AuthRequest;
+import ru.auth.models.request.AuthRequest;
 import ru.auth.models.AuthenticationResponse;
-import ru.auth.models.RegisterRequest;
+import ru.auth.models.request.RegisterRequest;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,7 +25,16 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request,
+                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
+            String response = "";
+            for (FieldError error : fieldErrorList) {
+                response += error.getDefaultMessage() + "\n";
+            }
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(service.register(request));
     }
 

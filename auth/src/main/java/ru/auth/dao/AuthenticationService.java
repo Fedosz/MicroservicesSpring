@@ -8,12 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.auth.models.*;
 import ru.auth.config.JwtService;
+import ru.auth.models.request.AuthRequest;
+import ru.auth.models.request.RegisterRequest;
 import ru.auth.repositories.SessionRepository;
 import ru.auth.repositories.UserRepo;
 
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.TreeSet;
 
 @Service
 @RequiredArgsConstructor

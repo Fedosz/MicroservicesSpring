@@ -28,6 +28,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
+                .requestMatchers("/api/manager/**")
+                .hasAuthority("manager")
                 .anyRequest()
                 .authenticated()
                 .and()

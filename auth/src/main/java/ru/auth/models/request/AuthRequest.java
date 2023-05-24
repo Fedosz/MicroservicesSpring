@@ -1,4 +1,4 @@
-package ru.auth.models;
+package ru.auth.models.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
+public class AuthRequest {
 
-    private String username;
     private String email;
     private String password;
 }
