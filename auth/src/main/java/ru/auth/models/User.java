@@ -25,6 +25,7 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @Column(name = "id", insertable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "username", nullable = false)
     private String username_;

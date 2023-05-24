@@ -4,16 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.auth.config.JwtService;
 import ru.auth.models.User;
 import ru.auth.repositories.UserRepo;
 
 @RestController
-@RequestMapping("/api/info")
+@RequestMapping("/api/manager")
 @RequiredArgsConstructor
-public class InfoController {
-
+public class ManagerController {
     private final UserRepo repository;
     private final JwtService jwtService;
 

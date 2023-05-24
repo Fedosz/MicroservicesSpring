@@ -8,8 +8,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.auth.models.*;
 import ru.auth.config.JwtService;
+import ru.auth.repositories.SessionRepository;
 import ru.auth.repositories.UserRepo;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.TreeSet;
 
 @Service
@@ -20,8 +23,9 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final SessionRepository sessionRepository;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public String register(RegisterRequest request) {
         var user = User.builder()
                 .email(request.getEmail())
                 .username_(request.getUsername())
@@ -30,11 +34,8 @@ public class AuthenticationService {
                 .build();
 
         repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
 
-        return AuthenticationResponse.builder()
-                .token(jwtToken)
-                .build();
+        return "Registration completed successfully";
     }
 
     public AuthenticationResponse authenticate(AuthRequest request) {
@@ -49,8 +50,25 @@ public class AuthenticationService {
 
         var jwtToken = jwtService.generateToken(user);
 
+        AddSessionToDB(jwtToken);
+
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
+    }
+
+    private void AddSessionToDB(String token) {
+        Session session = new Session();
+        session.setSession_token(token);
+
+        String username = jwtService.extractUsername(token);
+        var user = repository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        session.setUser_id(user.getId());
+        Timestamp date = new Timestamp(jwtService.extractExpiration(token).getTime());
+        session.setExpires_at(date);
+
+        sessionRepository.save(session);
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.auth.config.JwtService;
+import ru.auth.repositories.SessionRepository;
 
 import java.io.IOException;
 
