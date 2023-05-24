@@ -28,8 +28,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
-                .requestMatchers("/h2-console")
-                .permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
