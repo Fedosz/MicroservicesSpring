@@ -1,19 +1,17 @@
 package ru.auth.models;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class RegisterForm {
-    @Column(name = "username", nullable = false)
-    private String username;
-    @Column(name = "email", nullable = false)
-    private String email;
-    @Column(name = "password", nullable = false)
-    private String password;
+@AllArgsConstructor
+public class RegisterRequest {
 
+    private String username;
+    private String email;
+    private String password;
 }
