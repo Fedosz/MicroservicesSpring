@@ -23,6 +23,8 @@ public class Dish {
     private Double price;
     private Integer quantity;
     private Boolean is_available;
+    @Column(insertable = false)
     private Timestamp created_at;
+    @Column(insertable = false)
     private Timestamp updated_at;
 }

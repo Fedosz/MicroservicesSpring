@@ -1,14 +1,18 @@
 package ru.order.Controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import ru.order.DAO.OrdersService;
+import ru.order.config.JwtService;
 import ru.order.models.Dish;
+import ru.order.models.request.OrderRequest;
 import ru.order.repositories.DishRepository;
+import ru.order.repositories.OrderRepository;
 
 import java.util.List;
 
@@ -17,11 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderController {
 
-    private final DishRepository dishRepository;
+    private final OrdersService ordersService;
+    private final JwtService jwtService;
 
     @GetMapping("/menu")
     public ResponseEntity<StringBuilder> getMenu() {
-        List<Dish> dishes = dishRepository.findAll();
+        List<Dish> dishes = ordersService.allDishes();
         StringBuilder response = new StringBuilder();
 
         if (dishes.isEmpty()) {
@@ -44,5 +49,17 @@ public class OrderController {
         } else {
             return ResponseEntity.ok(response);
         }
+    }
+
+    @PostMapping("/new")
+    public ResponseEntity<StringBuilder> makeOrder(@RequestBody @Valid OrderRequest orderRequest,
+                                                   BindingResult bindingResult,
+                                                   @RequestHeader(name="Authorization") String token) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(new StringBuilder("Your order can't be empty"), HttpStatus.BAD_REQUEST);
+        }
+        token = token.substring(7);
+
+        return ordersService.makeOrder(orderRequest.getDishes(), orderRequest.getSpecial_request(), jwtService.extractUsername(token));
     }
 }

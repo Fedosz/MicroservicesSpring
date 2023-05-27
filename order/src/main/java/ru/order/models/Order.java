@@ -18,9 +18,12 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private Integer user_id;
+    @Column(name = "user_id")
+    private Integer userId;
     private String status;
-    private String special_request;
+    private String special_requests;
+    @Column(insertable = false)
     private Timestamp created_at;
+    @Column(insertable = false)
     private Timestamp updated_at;
 }
