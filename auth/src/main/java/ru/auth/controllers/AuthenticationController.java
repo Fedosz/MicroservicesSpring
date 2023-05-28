@@ -2,7 +2,6 @@ package ru.auth.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +12,6 @@ import ru.auth.models.request.AuthRequest;
 import ru.auth.models.AuthenticationResponse;
 import ru.auth.models.request.RegisterRequest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -23,6 +21,12 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+    /**
+     * registration request
+     * @param request = request body
+     * @param bindingResult = @Valid results
+     * @return = Answer
+     */
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest request,
                                            BindingResult bindingResult) {
@@ -34,19 +38,15 @@ public class AuthenticationController {
             }
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
+
         return ResponseEntity.ok(service.register(request));
     }
 
-    @GetMapping("/test")
-    public List<Pair<String, Integer>> aaaa() {
-        List<Pair<String, Integer>> aa = new ArrayList<>();
-        Pair<String, Integer> c = new Pair<String, Integer>("chicken curry", 1);
-        Pair<String, Integer> b = new Pair<String, Integer>("aaa", 3);
-        aa.add(c);
-        aa.add(b);
-        return aa;
-    }
-
+    /**
+     * login request
+     * @param request = request body
+     * @return = answer
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthRequest request) {
         return ResponseEntity.ok(service.authenticate(request));

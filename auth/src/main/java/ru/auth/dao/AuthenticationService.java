@@ -25,7 +25,17 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final SessionRepository sessionRepository;
 
+    /**
+     * registration
+     * @param request = request body
+     * @return = answer
+     */
     public String register(RegisterRequest request) {
+        if (repository.existsByEmail(request.getEmail())) {
+            return "Email is already in use";
+        }
+
+        //User builder
         var user = User.builder()
                 .email(request.getEmail())
                 .username_(request.getUsername())
@@ -38,16 +48,24 @@ public class AuthenticationService {
         return "Registration completed successfully";
     }
 
+    /**
+     * Login method
+     * @param request = request body
+     * @return = answer
+     */
     public AuthenticationResponse authenticate(AuthRequest request) {
+        //try to auth with given info
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
                         request.getPassword()
                 )
         );
+        //find email in db
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        //generate token
         var jwtToken = jwtService.generateToken(user);
 
         AddSessionToDB(jwtToken);
@@ -57,6 +75,10 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Add session to database
+     * @param token = token
+     */
     private void AddSessionToDB(String token) {
         Session session = new Session();
         session.setSession_token(token);

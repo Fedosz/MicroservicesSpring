@@ -17,6 +17,11 @@ public class InfoController {
     private final UserRepo repository;
     private final JwtService jwtService;
 
+    /**
+     * information request
+     * @param token = user token
+     * @return = information
+     */
     @GetMapping
     public ResponseEntity<String> Information(@RequestHeader(name="Authorization") String token) {
         token = token.substring(7);
