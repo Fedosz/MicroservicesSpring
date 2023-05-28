@@ -8,24 +8,29 @@ import ru.order.models.*;
 import ru.order.models.request.DishRequest;
 import ru.order.models.request.UpdateDishRequest;
 import ru.order.repositories.DishRepository;
-import ru.order.repositories.OrderRepository;
-import ru.order.repositories.Order_dishRepository;
-import ru.order.repositories.UserRepo;
 
 import java.util.List;
 
+/**
+ * Service that manipulates with dishes
+ */
 @Service
 @RequiredArgsConstructor
 public class DishService {
     private final DishRepository dishRepository;
-    private final OrderRepository orderRepository;
-    private final Order_dishRepository orderDishRepository;
-    private final UserRepo userRepository;
 
+    /**
+     * Get all dishes
+     * @return = list of dishes
+     */
     public List<Dish> allDishes() {
         return dishRepository.findAll();
     }
 
+    /**
+     * Create new dish
+     * @param dishRequest = request body
+     */
     public void createDish(DishRequest dishRequest) {
         Dish newDish = new Dish();
         newDish.setQuantity(dishRequest.getQuantity());
@@ -37,6 +42,11 @@ public class DishService {
         dishRepository.save(newDish);
     }
 
+    /**
+     * Delete dish
+     * @param id = id
+     * @return = Answer
+     */
     public ResponseEntity<String> deleteDish(Integer id) {
         if (!dishRepository.existsById(id)) {
             return new ResponseEntity<>("Dish doesn't exist", HttpStatus.BAD_REQUEST);
@@ -47,6 +57,11 @@ public class DishService {
         }
     }
 
+    /**
+     * Update dish quantity
+     * @param updateDishRequest = request body
+     * @return = answer
+     */
     public ResponseEntity<String> setDishQuantity(UpdateDishRequest updateDishRequest) {
         if (!dishRepository.existsById(updateDishRequest.getId())) {
             return new ResponseEntity<>("Dish with current id doesn't exist", HttpStatus.BAD_REQUEST);

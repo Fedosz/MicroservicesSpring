@@ -14,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.order.repositories.UserRepo;
 
+/**
+ * Configuration class, that provides Authentication Information
+ */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -43,6 +46,4 @@ public class ApplicationConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-
 }

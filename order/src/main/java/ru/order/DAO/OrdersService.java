@@ -1,7 +1,6 @@
 package ru.order.DAO;
 
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,10 @@ import ru.order.repositories.UserRepo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
+/**
+ * Services that manipulates orders
+ */
 @Service
 @RequiredArgsConstructor
 public class OrdersService {
@@ -24,6 +25,13 @@ public class OrdersService {
     private final Order_dishRepository orderDishRepository;
     private final UserRepo userRepository;
 
+    /**
+     * New order
+     * @param dishes = dishes list
+     * @param text = special request
+     * @param email = email of user
+     * @return = answer
+     */
     public ResponseEntity<StringBuilder> makeOrder(List<DishInfo<String, Integer>> dishes, String text, String email) {
 
         StringBuilder answer = new StringBuilder();
@@ -32,6 +40,7 @@ public class OrdersService {
 
         boolean couldBeDone = true;
 
+        //Start making order
         User user = userRepository.findByEmail(email).orElseThrow();
         current_order.setUserId(user.getId());
         current_order.setStatus("Waiting");
@@ -40,6 +49,7 @@ public class OrdersService {
         int cur = 0;
         Integer order_id = 0;
 
+        //Checking if we have all dishes
         for (var pair : dishes) {
 
             String name = pair.name();
@@ -65,9 +75,11 @@ public class OrdersService {
             }
         }
 
+        //If all good - start making order_dishes
         if (couldBeDone) {
             orderRepository.save(current_order);
 
+            //Find current order id by user id and status "Waiting"
             List<Order> possibles = orderRepository.findByUserId(user.getId());
             for (Order order : possibles) {
                 if (Objects.equals(order.getStatus(), "Waiting")) {
@@ -81,6 +93,7 @@ public class OrdersService {
                         Integer dish_id = orderDish.getDish_id();
                         Dish dish = dishRepository.findById(dish_id).orElseThrow();
 
+                        //Decrease amount of dishes in stock
                         dish.setQuantity(dish.getQuantity() - orderDish.getQuantity());
                         if (dish.getQuantity() == 0) {
                             dish.setIs_available(false);
@@ -88,6 +101,8 @@ public class OrdersService {
 
                         dishRepository.save(dish);
                     }
+
+                    //Send order for cooking
 
                     Cooker cooker = new Cooker(orderRepository, order_id);
                     Thread cooking = new Thread(cooker);
@@ -104,6 +119,11 @@ public class OrdersService {
         return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
+    /**
+     * Find order by id
+     * @param id = id
+     * @return order
+     */
     public Order findOrder(Integer id) {
         if (!orderRepository.existsById(id)) {
             return null;

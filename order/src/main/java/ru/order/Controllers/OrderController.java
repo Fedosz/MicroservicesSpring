@@ -24,6 +24,10 @@ public class OrderController {
     private final DishService dishService;
     private final JwtService jwtService;
 
+    /**
+     * Menu request
+     * @return menu
+     */
     @GetMapping("/menu")
     public ResponseEntity<StringBuilder> getMenu() {
         List<Dish> dishes = dishService.allDishes();
@@ -51,6 +55,13 @@ public class OrderController {
         }
     }
 
+    /**
+     * Create order
+     * @param orderRequest = request body
+     * @param bindingResult = @Valid errors
+     * @param token = jwt token
+     * @return = answer
+     */
     @PostMapping("/new")
     public ResponseEntity<StringBuilder> makeOrder(@RequestBody @Valid OrderRequest orderRequest,
                                                    BindingResult bindingResult,
@@ -63,6 +74,11 @@ public class OrderController {
         return ordersService.makeOrder(orderRequest.getDishes(), orderRequest.getSpecial_request(), jwtService.extractUsername(token));
     }
 
+    /**
+     * Get order by id
+     * @param id = id
+     * @return = order info
+     */
     @GetMapping("/{id}")
     public ResponseEntity<StringBuilder> orderInfo(@PathVariable Integer id) {
         Order current = ordersService.findOrder(id);

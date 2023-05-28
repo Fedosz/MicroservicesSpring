@@ -10,6 +10,9 @@ import ru.order.repositories.OrderRepository;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * Class that manipulates orders states
+ */
 @Data
 @AllArgsConstructor
 public class Cooker implements Runnable{
@@ -18,6 +21,9 @@ public class Cooker implements Runnable{
     private final OrderRepository orderRepository;
     private Integer order_id;
 
+    /**
+     * Cooking method
+     */
     @Override
     public void run() {
         Order cur = orderRepository.findById(order_id).orElseThrow();
@@ -30,6 +36,7 @@ public class Cooker implements Runnable{
             sleep(1000 * 60);
         } catch (InterruptedException e) {
 
+            // Order is canceled in case of exceptions;
             cur.setStatus("Canceled");
             orderRepository.save(cur);
 

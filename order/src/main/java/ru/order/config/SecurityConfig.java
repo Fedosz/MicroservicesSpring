@@ -11,6 +11,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import ru.order.filters.JwtAuthenticationFilter;
 
+/**
+ * Security configuration class
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
