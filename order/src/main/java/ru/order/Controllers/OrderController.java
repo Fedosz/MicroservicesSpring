@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.order.DAO.DishService;
 import ru.order.DAO.OrdersService;
 import ru.order.config.JwtService;
 import ru.order.models.Dish;
@@ -20,11 +21,12 @@ import java.util.List;
 public class OrderController {
 
     private final OrdersService ordersService;
+    private final DishService dishService;
     private final JwtService jwtService;
 
     @GetMapping("/menu")
     public ResponseEntity<StringBuilder> getMenu() {
-        List<Dish> dishes = ordersService.allDishes();
+        List<Dish> dishes = dishService.allDishes();
         StringBuilder response = new StringBuilder();
 
         if (dishes.isEmpty()) {

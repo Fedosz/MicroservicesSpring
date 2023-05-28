@@ -24,10 +24,6 @@ public class OrdersService {
     private final Order_dishRepository orderDishRepository;
     private final UserRepo userRepository;
 
-    public List<Dish> allDishes() {
-        return dishRepository.findAll();
-    }
-
     public ResponseEntity<StringBuilder> makeOrder(List<DishInfo<String, Integer>> dishes, String text, String email) {
 
         StringBuilder answer = new StringBuilder();
@@ -112,5 +108,6 @@ public class OrdersService {
             return orderRepository.findById(id).orElseThrow();
         }
     }
+
 
 }
