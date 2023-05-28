@@ -98,7 +98,7 @@ public class OrdersService {
 
         StringBuilder response = new StringBuilder("Order successfully created\n");
         response.append("Order id:").append(order_id);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return new ResponseEntity<>(response, HttpStatus.ACCEPTED);
     }
 
     public Order findOrder(Integer id) {

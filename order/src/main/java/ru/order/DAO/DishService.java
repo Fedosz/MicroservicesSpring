@@ -1,6 +1,8 @@
 package ru.order.DAO;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.order.models.*;
 import ru.order.models.request.DishRequest;
@@ -32,6 +34,16 @@ public class DishService {
         newDish.setIs_available(dishRequest.getQuantity() > 0);
 
         dishRepository.save(newDish);
+    }
+
+    public ResponseEntity<String> deleteDish(Integer id) {
+        if (!dishRepository.existsById(id)) {
+            return new ResponseEntity<>("Dish doesn't exist", HttpStatus.BAD_REQUEST);
+        } else {
+            Dish cur = dishRepository.findById(id).orElseThrow();
+            dishRepository.delete(cur);
+            return new ResponseEntity<>("Dish successfully deleted", HttpStatus.OK);
+        }
     }
 
 }

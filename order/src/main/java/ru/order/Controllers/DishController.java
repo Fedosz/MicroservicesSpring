@@ -58,4 +58,9 @@ public class DishController {
         return new ResponseEntity<>("Dish successfully added", HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteDish(@RequestBody Integer id) {
+        return dishService.deleteDish(id);
+    }
+
 }
