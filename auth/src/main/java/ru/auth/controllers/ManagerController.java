@@ -11,6 +11,9 @@ import ru.auth.models.User;
 import ru.auth.models.request.ManagerRequest;
 import ru.auth.repositories.UserRepo;
 
+import java.sql.Timestamp;
+import java.util.Date;
+
 @RestController
 @RequestMapping("/api/manager")
 @RequiredArgsConstructor
@@ -47,7 +50,8 @@ public class ManagerController {
         }
 
         user.setRole(role);
-        //save changed
+        user.setUpdated_at(new Timestamp(new Date().getTime()));
+        //save changes
         repository.save(user);
 
         return ResponseEntity.ok("Role successfully changed");
