@@ -13,18 +13,29 @@
 #### * = Manager only
 #### Первый микросервис:
 POST /api/auth/register - Регистрация
+
 POST /api/auth/login - Авторизация
+
 *Все последующие запросы доступны как минимум авторизированных с помощью JWT Токена пользователям!*
 GET /api/info - Информация о пользователе по токену
+
 PUT /api/manager/changeRole* - Смена роли пользователя   
+
 #### Второй микросервис:
 GET /api/order/menu - Получение меню
+
 POST /api/order/new - Создание заказа
+
 GET /api/order/{id} - Получение информации о заказе по его идентификатору
+
 GET /api/dish/getAll* - Получение списка всех блюд в ресторане (доступных и недоступных)
+
 POST /api/dish/add* - Добавление нового блюда
+
 DEL /api/dish/delete* - Удаление блюда
+
 PUT /api/dish/update* - Обновление кол-ва блюда в ресторане
+
 *Последние четыре метода реализуют CRUD для блюд ресторана*
 ### [Postman Collection](https://www.postman.com/fedosz/workspace/auth-and-restaurant-api/overview)
 
