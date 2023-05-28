@@ -9,6 +9,8 @@ import ru.order.models.request.DishRequest;
 import ru.order.models.request.UpdateDishRequest;
 import ru.order.repositories.DishRepository;
 
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -74,6 +76,8 @@ public class DishService {
             } else {
                 dish.setIs_available(true);
             }
+
+            dish.setUpdated_at(new Timestamp(new Date().getTime()));
 
             dishRepository.save(dish);
 
