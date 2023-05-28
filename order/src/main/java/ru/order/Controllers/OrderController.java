@@ -4,7 +4,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import ru.order.DAO.OrdersService;
@@ -12,8 +11,6 @@ import ru.order.config.JwtService;
 import ru.order.models.Dish;
 import ru.order.models.Order;
 import ru.order.models.request.OrderRequest;
-import ru.order.repositories.DishRepository;
-import ru.order.repositories.OrderRepository;
 
 import java.util.List;
 
