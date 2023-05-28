@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.order.DAO.OrdersService;
 import ru.order.config.JwtService;
 import ru.order.models.Dish;
+import ru.order.models.Order;
 import ru.order.models.request.OrderRequest;
 import ru.order.repositories.DishRepository;
 import ru.order.repositories.OrderRepository;
@@ -61,5 +62,15 @@ public class OrderController {
         token = token.substring(7);
 
         return ordersService.makeOrder(orderRequest.getDishes(), orderRequest.getSpecial_request(), jwtService.extractUsername(token));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<StringBuilder> orderInfo(@PathVariable Integer id) {
+        Order current = ordersService.findOrder(id);
+        if (current == null) {
+            return new ResponseEntity<>(new StringBuilder("No order with current id"), HttpStatus.BAD_REQUEST);
+        } else {
+            return new ResponseEntity<>(new StringBuilder(current.getStatus()), HttpStatus.OK);
+        }
     }
 }

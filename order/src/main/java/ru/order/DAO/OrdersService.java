@@ -42,6 +42,7 @@ public class OrdersService {
         current_order.setSpecial_requests(text);
 
         int cur = 0;
+        Integer order_id = 0;
 
         for (var pair : dishes) {
 
@@ -74,10 +75,10 @@ public class OrdersService {
             List<Order> possibles = orderRepository.findByUserId(user.getId());
             for (Order order : possibles) {
                 if (Objects.equals(order.getStatus(), "Waiting")) {
-                    Integer id = order.getId();
+                    order_id = order.getId();
 
                     for (Order_dish orderDish : orderDishes) {
-                        orderDish.setOrder_id(id);
+                        orderDish.setOrder_id(order_id);
 
                         orderDishRepository.save(orderDish);
 
@@ -99,7 +100,17 @@ public class OrdersService {
             return new ResponseEntity<>(answer, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(new StringBuilder("Order successfully created"), HttpStatus.OK);
+        StringBuilder response = new StringBuilder("Order successfully created\n");
+        response.append("Order id:").append(order_id);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    public Order findOrder(Integer id) {
+        if (!orderRepository.existsById(id)) {
+            return null;
+        } else {
+            return orderRepository.findById(id).orElseThrow();
+        }
     }
 
 }

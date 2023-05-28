@@ -17,7 +17,7 @@ import ru.auth.repositories.UserRepo;
 public class ManagerController {
     private final UserRepo repository;
 
-    @PostMapping("/changeRole")
+    @PutMapping("/changeRole")
     public ResponseEntity<String> Information(@RequestBody ManagerRequest request) {
         Role role;
         switch (request.getRole()) {
