@@ -11,6 +11,7 @@ import ru.order.DAO.DishService;
 import ru.order.DAO.OrdersService;
 import ru.order.models.Dish;
 import ru.order.models.request.DishRequest;
+import ru.order.models.request.UpdateDishRequest;
 
 import java.util.List;
 
@@ -19,7 +20,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DishController {
 
-    private final OrdersService ordersService;
     private final DishService dishService;
 
     @GetMapping("/getAll")
@@ -63,4 +63,18 @@ public class DishController {
         return dishService.deleteDish(id);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<String> updateDish(@RequestBody @Valid UpdateDishRequest updateDishRequest,
+                                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrorList = bindingResult.getFieldErrors();
+            StringBuilder response = new StringBuilder();
+            for (FieldError error : fieldErrorList) {
+                response.append(error.getDefaultMessage()).append("\n");
+            }
+            return new ResponseEntity<>(response.toString(), HttpStatus.BAD_REQUEST);
+        }
+
+        return dishService.setDishQuantity(updateDishRequest);
+    }
 }

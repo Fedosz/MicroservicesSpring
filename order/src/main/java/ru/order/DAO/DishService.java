@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.order.models.*;
 import ru.order.models.request.DishRequest;
+import ru.order.models.request.UpdateDishRequest;
 import ru.order.repositories.DishRepository;
 import ru.order.repositories.OrderRepository;
 import ru.order.repositories.Order_dishRepository;
@@ -44,6 +45,26 @@ public class DishService {
             dishRepository.delete(cur);
             return new ResponseEntity<>("Dish successfully deleted", HttpStatus.OK);
         }
+    }
+
+    public ResponseEntity<String> setDishQuantity(UpdateDishRequest updateDishRequest) {
+        if (!dishRepository.existsById(updateDishRequest.getId())) {
+            return new ResponseEntity<>("Dish with current id doesn't exist", HttpStatus.BAD_REQUEST);
+        } else {
+            Dish dish = dishRepository.findById(updateDishRequest.getId()).orElseThrow();
+            dish.setQuantity(updateDishRequest.getNew_quantity());
+
+            if (updateDishRequest.getNew_quantity() == 0) {
+                dish.setIs_available(false);
+            } else {
+                dish.setIs_available(true);
+            }
+
+            dishRepository.save(dish);
+
+            return new ResponseEntity<>("Dish quantity successfully updated", HttpStatus.OK);
+        }
+
     }
 
 }

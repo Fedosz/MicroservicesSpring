@@ -89,7 +89,10 @@ public class OrdersService {
                         dishRepository.save(dish);
                     }
 
-                    // TODO: send order to cooking
+                    Cooker cooker = new Cooker(orderRepository, order_id);
+                    Thread cooking = new Thread(cooker);
+
+                    cooking.start();
                 }
             }
         } else {
