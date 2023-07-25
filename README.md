@@ -1,6 +1,6 @@
 # Spring java microservices
 #### RESTful Api applications, that provides microservices for auth and restaurant control
-###  Жуков Фёдор Сергеевич БПИ218
+###  Жуков Фёдор Сергеевич
 ---
 
 ## Архитектура:
